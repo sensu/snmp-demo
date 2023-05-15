@@ -1,0 +1,32 @@
+---
+type: CheckConfig
+api_version: core/v2
+metadata:
+ name: scrape-snmp
+ namespace: default
+ labels:
+   sensu.io/managed_by: sensuctl
+ created_by: admin
+spec:
+ command: >-
+    http-get -u {{ .labels.exporter_url | default "http://localhost" }}:{{ .labels.exporter_port | default 9116 }}/snmp?target={{ .labels.snmp_target | default "10.0.0.1" }}&module={{ .labels.module | default "if_mib" }}
+ interval: 120
+ output_metric_format: 'prometheus_text'
+ output_metric_thresholds:
+ - name: ifOperStatus
+   null_status: 1
+   thresholds:
+   - min: '1'
+     status: 2
+ proxy_requests:
+   entity_attributes:
+     - entity.labels.network_device == 'router'
+   splay: false
+   splay_coverage: 0
+ publish: true
+ round_robin: false
+ runtime_assets:
+   - http-checks
+ subscriptions:
+   - entity:sensu-agent
+ timeout: 120

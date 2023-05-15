@@ -1,0 +1,25 @@
+---
+type: Entity
+api_version: core/v2
+metadata:
+ labels:
+   network_device: router
+   exporter_url: http://snmp_exporter
+   snmp_target: snmpsim
+ name: snmpsim
+ namespace: default
+spec:
+ entity_class: proxy
+---
+type: Entity
+api_version: core/v2
+metadata:
+ labels:
+   network_device: router
+   exporter_url: http://snmp_exporter
+   snmp_target: snmpsim2
+   module: if_mib
+ name: snmpsim2
+ namespace: default
+spec:
+ entity_class: proxy
